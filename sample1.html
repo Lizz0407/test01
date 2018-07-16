@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <script src="jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+
+        function removeSpecialChar(value) {
+            var regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi
+            return value.replace(regExp,'');
+        }
+
+        function addComma(obj) {
+            var regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi
+            var textNum = obj.value.replace(regExp,'');
+            if(!/[0-9*]$/g.test(obj.value)) {
+                obj.value = '';
+            }
+            else {
+                var commaNum = Number(textNum).toLocaleString('en');
+                obj.value = commaNum;
+            }
+        }
+
+        function removeComma(value) {
+            var regExp = /,/g
+            return Number(value.replace(regExp,''));
+        }
+
+        function viewKorean(obj) {
+            var regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi
+            var textNum = obj.value.replace(regExp,'');
+            if(!/[0-9*]$/g.test(obj.value)) {
+                 obj.value = '';
+            }
+            else {
+                var hanA = new Array("","일","이","삼","사","오","육","칠","팔","구","십");
+                var danA = new Array("","십","백","천","","십","백","천","","십","백","천","","십","백","천");
+                var result = "";
+                for(i=0; i<textNum.length; i++) {
+                    str = "";
+                    han = hanA[textNum.charAt(textNum.length-(i+1))];
+                    if(han != "") str += han+danA[i];
+                    if(i == 4) str += "만";
+                    if(i == 8) str += "억";
+                    if(i == 12) str += "조";
+                    result = str + result;
+                }
+                if(textNum != 0) {
+                    var arr = ['조','억','만'];
+                    for(var i = 0; i<arr.length;i++) {
+                        var regExp = new RegExp('['+arr[i]+']','g');
+                        result = result.replace(regExp, arr[i]+' ')
+                    }
+
+                    var twoNum = result.substr(0,2);
+                    if(twoNum == '일만') {
+                        result = result.replace('일만', '만');
+                    }
+
+                    var regExp1 = /일천/g
+                    var regExp2 = /일백/g
+                    var regExp3 = /일십/g
+                    result = result.replace(regExp1,'천').replace(regExp2,'백').replace(regExp3,'십');
+
+                    result = result + '원';
+                }
+
+                $('#aaa').text(result);
+            }
+        }
+
+        $('#abc').on('keyup', function(e) {
+            addComma(this);
+            viewKorean(this);
+        });
+
+    </script>
+</head>
+<body>
+
+    <input type="text" id="abc"><span id="aaa"/>
+
+</body>
+</html>
