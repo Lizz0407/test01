@@ -71,9 +71,11 @@
             }
         }
 
-        $('#abc').on('keyup', function(e) {
+        $(document).ready(function(e) {
+            $('#abc').on('keyup', function(e) {
             addComma(this);
             viewKorean(this);
+            });
         });
 
     </script>
